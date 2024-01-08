@@ -1,5 +1,5 @@
 import { AnyAction, createAsyncThunk, createSlice, Dispatch, PayloadAction } from '@reduxjs/toolkit'
-import { CertificateModel } from '../interfaces'
+import  {CertificateModel}  from '../interfaces/certificate'
 import axios from 'axios'
 import { getEnv } from '../env'
 

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { CertificateTable, Container, DomainInput, Footer } from "../components";
 
 const HomePage: React.FC = () => {

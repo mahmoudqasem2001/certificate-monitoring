@@ -1,10 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCertificates, setDomain } from "../store/certificate-slice";
-import { RootState } from "../store/store";
+import { AppDispatch, RootState } from "../store/store";
+import SubscriptionForm from "./SubscriptionForm";
+import { subscribeToDomain } from "../store/subscription-slice";
+
+interface SubscriptionFormType {
+  domain: string;
+  email: string;
+}
 
 const DomainInput: React.FC = () => {
-  const dispatch = useDispatch();
+  const [showSubscribeModal, setShowSubscribeModal] = useState(false);
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  const fetched = useSelector(
+    (state: RootState) => state.certificatesReducer.isFetched
+  );
   const domain = useSelector(
     (state: RootState) => state.certificatesReducer.domain
   );
@@ -25,6 +38,11 @@ const DomainInput: React.FC = () => {
     if (event.key === "Enter") {
       handleFetchCertificates();
     }
+  };
+
+  const handleSubscribe = ({ domain, email }: SubscriptionFormType) => {
+    dispatch(subscribeToDomain({ domain, email }));
+    setShowSubscribeModal(false);
   };
 
   return (
@@ -57,6 +75,18 @@ const DomainInput: React.FC = () => {
           </button>
         </div>
       </div>
+      {fetched && (
+        <button
+          onClick={() => setShowSubscribeModal(!showSubscribeModal)}
+          className="bg-black text-white px-2 py-1 rounded-sm hover:bg-gray-800"
+        >
+          Subscribe
+        </button>
+      )}
+
+      {showSubscribeModal && fetched && (
+        <SubscriptionForm domain={domain} onSubmit={handleSubscribe} />
+      )}
     </div>
   );
 };
